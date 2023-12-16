@@ -1,7 +1,12 @@
 import React from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
+import HomeRoute from "./components/HomeRoute/HomeRoute";
+
+const router = createBrowserRouter([{ path: "/", Component: HomeRoute }]);
 
 function App() {
-  return <h1>Meet Grid</h1>;
+  return <RouterProvider router={router} />;
 }
 
 export default App;
