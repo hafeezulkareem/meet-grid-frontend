@@ -17,6 +17,10 @@ const HomeRoute = () => {
         }}
       >
         <MeetSetup />
+
+        <Box sx={{ maxWidth: "40rem", padding: "1em 3em" }}>
+          Slider & Meetings
+        </Box>
       </Box>
     </Box>
   );
