@@ -94,6 +94,7 @@ const MeetRoomRoute = () => {
     if (!socket || !peer) return;
 
     socket.on("disconnect", () => {
+      peer.disconnect();
       socket.emit("removePeer", { roomId, peerId: peer.id });
     });
 
