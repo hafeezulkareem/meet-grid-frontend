@@ -16,8 +16,6 @@ export const useMediaStream = () => {
           video: true,
         });
 
-        console.log("setting your stream");
-
         setStream(stream);
       } catch (e) {
         console.log("Error in media navigator", e);
