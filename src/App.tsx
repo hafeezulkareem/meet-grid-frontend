@@ -3,8 +3,12 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Box } from "@mui/material";
 
 import HomeRoute from "./components/HomeRoute/HomeRoute";
+import MeetRoomRoute from "./components/MeetRoomRoute/MeetRoomRoute";
 
-const router = createBrowserRouter([{ path: "/", Component: HomeRoute }]);
+const router = createBrowserRouter([
+  { path: "/", Component: HomeRoute },
+  { path: "/:roomId", Component: MeetRoomRoute },
+]);
 
 function App() {
   return (
