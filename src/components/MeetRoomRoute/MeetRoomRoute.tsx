@@ -30,6 +30,14 @@ const MeetRoomRoute = () => {
 
     socket.on("connect", () => {});
 
+    socket.on("peerRemoved", (peerId) => {
+      setParticipants((prev) => {
+        const updatedParticipants = { ...prev };
+        delete updatedParticipants[peerId];
+        return updatedParticipants;
+      });
+    });
+
     setSocket(socket);
   }, []);
 
@@ -93,18 +101,15 @@ const MeetRoomRoute = () => {
   useEffect(() => {
     if (!socket || !peer) return;
 
-    socket.on("disconnect", () => {
-      peer.disconnect();
+    const removeUser = () => {
       socket.emit("removePeer", { roomId, peerId: peer.id });
-    });
+    };
 
-    socket.on("peerRemoved", (userId) => {
-      setParticipants((prev) => {
-        const updatedParticipants = { ...prev };
-        delete updatedParticipants[userId];
-        return updatedParticipants;
-      });
-    });
+    window.addEventListener("beforeunload", removeUser);
+
+    return () => {
+      window.removeEventListener("beforeunload", removeUser);
+    };
   }, [socket, peer, roomId]);
 
   useEffect(() => {
@@ -125,7 +130,7 @@ const MeetRoomRoute = () => {
 
   return (
     <Box sx={{ width: "100vw", height: "100vh", backgroundColor: "black" }}>
-      <Box sx={{ height: "calc(100vh - 5em)" }}>
+      <Box sx={{ height: "calc(100vh - 5em)", display: "flex", gap: "16px" }}>
         {Object.keys(participants).map((participantId) => {
           const participant = participants[participantId];
 
@@ -135,8 +140,8 @@ const MeetRoomRoute = () => {
               muted={participant.muted}
               playing={participant.playing}
               url={participant.stream}
-              width="100%"
-              height="100%"
+              width="400px"
+              height="400px"
             />
           );
         })}
