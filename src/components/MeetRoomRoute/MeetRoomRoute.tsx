@@ -140,7 +140,7 @@ const MeetRoomRoute = () => {
               muted={participant.muted}
               playing={participant.playing}
               url={participant.stream}
-              width="400px"
+              width="401px"
               height="400px"
             />
           );
