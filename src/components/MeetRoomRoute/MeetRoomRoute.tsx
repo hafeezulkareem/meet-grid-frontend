@@ -28,8 +28,6 @@ const MeetRoomRoute = () => {
     socketRef.current = io("http://localhost:4000/");
     const socket = socketRef.current;
 
-    socket.on("connect", () => {});
-
     socket.on("peerRemoved", (peerId) => {
       setParticipants((prev) => {
         const updatedParticipants = { ...prev };
