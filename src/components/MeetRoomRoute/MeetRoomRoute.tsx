@@ -83,16 +83,18 @@ const MeetRoomRoute = () => {
       const { peer: calledId } = call;
       call.answer(stream as MediaStream);
 
-      setParticipants((prev) => ({
-        ...prev,
-        [calledId]: {
-          id: calledId,
-          name: "Hafeez",
-          stream,
-          playing: true,
-          muted: true,
-        },
-      }));
+      call.on("stream", (stream) => {
+        setParticipants((prev) => ({
+          ...prev,
+          [calledId]: {
+            id: calledId,
+            name: "Hafeez",
+            stream,
+            playing: true,
+            muted: true,
+          },
+        }));
+      });
     });
   }, [peer, stream]);
 
