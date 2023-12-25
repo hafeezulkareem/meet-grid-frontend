@@ -152,18 +152,27 @@ const MeetRoomRoute = () => {
   }, [peer, stream]);
 
   return (
-    <Box sx={{ width: "100vw", height: "100vh", backgroundColor: "black" }}>
-      <Box sx={{ height: "calc(100vh - 5em)", display: "flex", gap: "16px" }}>
+    <Box sx={{ width: "100vw", height: "100vh", backgroundColor: "#202124" }}>
+      <Box
+        sx={{
+          height: "calc(100vh - 5em)",
+          display: "flex",
+          gap: "16px",
+          flexWrap: "wrap",
+          padding: "32px",
+        }}
+      >
         {Object.keys(participants).map((participantId) => {
           const participant = participants[participantId];
           const mySelf = participant.id === peer?.id;
 
-          const muted = mySelf ? true : participant.muted;
+          const muted = mySelf ? !micOn : participant.muted;
           const playing = mySelf ? cameraOn : participant.playing;
 
           return (
             <UserDisplay
               key={participantId}
+              name={participant.name}
               muted={muted}
               playing={playing}
               stream={participant.stream}
