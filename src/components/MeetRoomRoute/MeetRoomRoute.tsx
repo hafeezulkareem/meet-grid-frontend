@@ -7,7 +7,7 @@ import { Peer } from "peerjs";
 import { v4 as uuid } from "uuid";
 import { useMediaStream } from "../../hooks";
 import { User } from "../../types";
-import UserGrid from "./UserGrid/UserGrid";
+import UserDisplay from "./UserDisplay/UserDisplay";
 
 const MeetRoomRoute = () => {
   const { roomId } = useParams();
@@ -162,7 +162,7 @@ const MeetRoomRoute = () => {
           const playing = mySelf ? cameraOn : participant.playing;
 
           return (
-            <UserGrid
+            <UserDisplay
               key={participantId}
               muted={muted}
               playing={playing}

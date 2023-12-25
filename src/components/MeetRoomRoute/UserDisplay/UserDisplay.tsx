@@ -7,7 +7,7 @@ interface Props {
   stream: MediaStream;
 }
 
-const UserGrid: FC<Props> = (props) => {
+const UserDisplay: FC<Props> = (props) => {
   const { playing, muted, stream } = props;
 
   return (
@@ -21,4 +21,4 @@ const UserGrid: FC<Props> = (props) => {
   );
 };
 
-export default UserGrid;
+export default UserDisplay;
