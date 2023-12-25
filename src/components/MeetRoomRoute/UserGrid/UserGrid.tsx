@@ -1,11 +1,20 @@
+import React, { FC } from "react";
 import ReactPlayer from "react-player";
 
-const UserGrid = ({ muted, playing, participant }) => {
+interface Props {
+  playing: boolean;
+  muted: boolean;
+  stream: MediaStream;
+}
+
+const UserGrid: FC<Props> = (props) => {
+  const { playing, muted, stream } = props;
+
   return (
     <ReactPlayer
+      url={stream}
       muted={muted}
       playing={playing}
-      url={participant.stream}
       width="401px"
       height="400px"
     />

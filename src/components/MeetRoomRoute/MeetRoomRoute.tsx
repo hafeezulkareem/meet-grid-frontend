@@ -166,7 +166,7 @@ const MeetRoomRoute = () => {
               key={participantId}
               muted={muted}
               playing={playing}
-              participant={participant}
+              stream={participant.stream}
             />
           );
         })}
