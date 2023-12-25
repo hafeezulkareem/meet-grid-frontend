@@ -5,3 +5,14 @@ export interface User {
   playing: boolean;
   muted: boolean;
 }
+
+export interface FooterProps {
+  controls: {
+    micOn: boolean;
+    setMicOn: (e: boolean) => void;
+    cameraOn: boolean;
+    setCameraOn: (e: boolean) => void;
+    socket: any;
+    peerId: string | undefined;
+  };
+}

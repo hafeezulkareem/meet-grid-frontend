@@ -6,8 +6,8 @@ import { Socket, io } from "socket.io-client";
 import { Peer } from "peerjs";
 import { v4 as uuid } from "uuid";
 import { useMediaStream } from "../../hooks";
-import ReactPlayer from "react-player";
 import { User } from "../../types";
+import UserGrid from "./UserGrid/UserGrid";
 
 const MeetRoomRoute = () => {
   const { roomId } = useParams();
@@ -18,6 +18,9 @@ const MeetRoomRoute = () => {
 
   const [socket, setSocket] = useState<Socket | null>(null);
   const [peer, setPeer] = useState<Peer | null>(null);
+
+  const [micOn, setMicOn] = useState(true);
+  const [cameraOn, setCameraOn] = useState(true);
 
   const [participants, setParticipants] = useState<Record<string, User>>({});
 
@@ -68,7 +71,7 @@ const MeetRoomRoute = () => {
             name: "Hafeez",
             stream,
             playing: true,
-            muted: true,
+            muted: false,
           },
         }));
       });
@@ -91,7 +94,7 @@ const MeetRoomRoute = () => {
             name: "Hafeez",
             stream,
             playing: true,
-            muted: true,
+            muted: false,
           },
         }));
       });
@@ -105,12 +108,32 @@ const MeetRoomRoute = () => {
       socket.emit("removePeer", { roomId, peerId: peer.id });
     };
 
+    socket.on("userAudioStatus", (data) => {
+      if (participants[data.peerId]) {
+        setParticipants((prev) => {
+          const updatedParticipants = { ...prev };
+          updatedParticipants[data.peerId].muted = data.muted;
+          return updatedParticipants;
+        });
+      }
+    });
+
+    socket.on("userVideoStatus", (data) => {
+      if (participants[data.peerId]) {
+        setParticipants((prev) => {
+          const updatedParticipants = { ...prev };
+          updatedParticipants[data.peerId].playing = data.playing;
+          return updatedParticipants;
+        });
+      }
+    });
+
     window.addEventListener("beforeunload", removeUser);
 
     return () => {
       window.removeEventListener("beforeunload", removeUser);
     };
-  }, [socket, peer, roomId]);
+  }, [socket, peer, roomId, participants]);
 
   useEffect(() => {
     if (!stream || !peer) return;
@@ -122,7 +145,7 @@ const MeetRoomRoute = () => {
         id: peerId,
         name: "Hafeez",
         stream,
-        muted: true,
+        muted: false,
         playing: true,
       },
     }));
@@ -133,20 +156,31 @@ const MeetRoomRoute = () => {
       <Box sx={{ height: "calc(100vh - 5em)", display: "flex", gap: "16px" }}>
         {Object.keys(participants).map((participantId) => {
           const participant = participants[participantId];
+          const mySelf = participant.id === peer?.id;
+
+          const muted = mySelf ? true : participant.muted;
+          const playing = mySelf ? cameraOn : participant.playing;
 
           return (
-            <ReactPlayer
+            <UserGrid
               key={participantId}
-              muted={participant.muted}
-              playing={participant.playing}
-              url={participant.stream}
-              width="401px"
-              height="400px"
+              muted={muted}
+              playing={playing}
+              participant={participant}
             />
           );
         })}
       </Box>
-      <Footer />
+      <Footer
+        controls={{
+          micOn,
+          setMicOn,
+          cameraOn,
+          setCameraOn,
+          socket,
+          peerId: peer?.id,
+        }}
+      />
     </Box>
   );
 };

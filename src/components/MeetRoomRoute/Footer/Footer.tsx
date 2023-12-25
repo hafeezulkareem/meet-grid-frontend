@@ -1,11 +1,13 @@
-import React from "react";
 import dayjs from "dayjs";
 import { useParams } from "react-router-dom";
 import { Box, IconButton, Typography, styled } from "@mui/material";
 import MicIcon from "@mui/icons-material/Mic";
+import MicOffIcon from "@mui/icons-material/MicOff";
 import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
 import VideocamOutlinedIcon from "@mui/icons-material/VideocamOutlined";
+import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import CallEndIcon from "@mui/icons-material/CallEnd";
+import { FooterProps } from "../../../types";
 
 const BootstrapIconButton = styled(IconButton)({
   backgroundColor: "#3c4043",
@@ -16,10 +18,30 @@ const BootstrapIconButton = styled(IconButton)({
   },
 });
 
-const Footer = () => {
+const createButtonStyle = (streaming) => ({
+  backgroundColor: streaming ? "#3c4043" : "#ff4000",
+  color: "white",
+  "&:hover": {
+    backgroundColor: streaming ? "#3c4043" : "#ff4000",
+    boxShadow: "none",
+  },
+});
+
+const Footer: React.FC<FooterProps> = ({ controls }) => {
+  const { micOn, setMicOn, cameraOn, setCameraOn, socket, peerId } = controls;
   const { roomId } = useParams();
 
   const nowTime = dayjs(new Date()).format("hh:mm A");
+
+  const handleAudio = () => {
+    socket.emit("userAudioStatus", { peerId, muted: micOn });
+    setMicOn(!micOn);
+  };
+
+  const handleVideo = () => {
+    socket.emit("userVideoStatus", { peerId, playing: !cameraOn });
+    setCameraOn(!cameraOn);
+  };
 
   return (
     <Box
@@ -39,14 +61,30 @@ const Footer = () => {
       </Box>
 
       <Box sx={{ display: "flex", gap: "16px" }}>
-        <BootstrapIconButton size="medium">
-          <MicIcon fontSize="small" />
+        <BootstrapIconButton
+          size="medium"
+          sx={createButtonStyle(micOn)}
+          onClick={handleAudio}
+        >
+          {micOn ? (
+            <MicIcon fontSize="medium" />
+          ) : (
+            <MicOffIcon fontSize="medium" />
+          )}
         </BootstrapIconButton>
-        <BootstrapIconButton size="medium">
-          <VideocamOutlinedIcon fontSize="small" />
+        <BootstrapIconButton
+          size="medium"
+          sx={createButtonStyle(cameraOn)}
+          onClick={handleVideo}
+        >
+          {cameraOn ? (
+            <VideocamOutlinedIcon fontSize="medium" />
+          ) : (
+            <VideocamOffIcon fontSize="medium" />
+          )}
         </BootstrapIconButton>
-        <BootstrapIconButton size="medium" sx={{ backgroundColor: "#ea4335" }}>
-          <CallEndIcon fontSize="small" />
+        <BootstrapIconButton size="medium" sx={createButtonStyle(false)}>
+          <CallEndIcon fontSize="medium" />
         </BootstrapIconButton>
       </Box>
 
