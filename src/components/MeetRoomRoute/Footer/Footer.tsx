@@ -5,9 +5,9 @@ import MicIcon from "@mui/icons-material/Mic";
 import MicOffIcon from "@mui/icons-material/MicOff";
 import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
 import VideocamOutlinedIcon from "@mui/icons-material/VideocamOutlined";
-import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import CallEndIcon from "@mui/icons-material/CallEnd";
 import { FooterProps } from "../../../types";
+import { VideocamOffOutlined } from "@mui/icons-material";
 
 const BootstrapIconButton = styled(IconButton)({
   backgroundColor: "#3c4043",
@@ -80,7 +80,7 @@ const Footer: React.FC<FooterProps> = ({ controls }) => {
           {cameraOn ? (
             <VideocamOutlinedIcon fontSize="medium" />
           ) : (
-            <VideocamOffIcon fontSize="medium" />
+            <VideocamOffOutlined fontSize="medium" />
           )}
         </BootstrapIconButton>
         <BootstrapIconButton size="medium" sx={createButtonStyle(false)}>
