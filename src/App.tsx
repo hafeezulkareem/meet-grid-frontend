@@ -4,8 +4,10 @@ import { Box } from "@mui/material";
 
 import HomeRoute from "./components/HomeRoute/HomeRoute";
 import MeetRoomRoute from "./components/MeetRoomRoute/MeetRoomRoute";
+import AuthenticationRoute from "./components/AuthenticationRoute/AuthenticationRoute";
 
 const router = createBrowserRouter([
+  {path: "/login", Component: AuthenticationRoute},
   { path: "/", Component: HomeRoute },
   { path: "/:roomId", Component: MeetRoomRoute },
 ]);
