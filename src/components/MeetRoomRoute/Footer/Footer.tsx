@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { useParams } from "react-router-dom";
-import { Box, IconButton, Typography, styled } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import MicIcon from "@mui/icons-material/Mic";
 import MicOffIcon from "@mui/icons-material/MicOff";
 import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
@@ -9,20 +9,13 @@ import CallEndIcon from "@mui/icons-material/CallEnd";
 import { FooterProps } from "../../../types";
 import { VideocamOffOutlined } from "@mui/icons-material";
 
-const BootstrapIconButton = styled(IconButton)({
-  backgroundColor: "#3c4043",
-  color: "white",
-  "&:hover": {
-    backgroundColor: "#3c4043",
-    boxShadow: "none",
-  },
-});
-
 const createButtonStyle = (streaming) => ({
-  backgroundColor: streaming ? "#3c4043" : "#ff4000",
+  width: "2.5rem",
+  height: "2.5rem",
+  backgroundColor: streaming ? "#3c4043" : "#ea4335",
   color: "white",
   "&:hover": {
-    backgroundColor: streaming ? "#3c4043" : "#ff4000",
+    backgroundColor: streaming ? "#3c4043" : "#ea4335",
     boxShadow: "none",
   },
 });
@@ -60,36 +53,40 @@ const Footer: React.FC<FooterProps> = ({ controls }) => {
         <Typography>{roomId}</Typography>
       </Box>
 
-      <Box sx={{ display: "flex", gap: "16px" }}>
-        <BootstrapIconButton
-          size="medium"
-          sx={createButtonStyle(micOn)}
-          onClick={handleAudio}
-        >
+      <Box sx={{ display: "flex", gap: "12px" }}>
+        <IconButton sx={createButtonStyle(micOn)} onClick={handleAudio}>
           {micOn ? (
-            <MicIcon fontSize="medium" />
+            <MicIcon fontSize="small" />
           ) : (
-            <MicOffIcon fontSize="medium" />
+            <MicOffIcon fontSize="small" />
           )}
-        </BootstrapIconButton>
-        <BootstrapIconButton
-          size="medium"
-          sx={createButtonStyle(cameraOn)}
-          onClick={handleVideo}
-        >
+        </IconButton>
+        <IconButton sx={createButtonStyle(cameraOn)} onClick={handleVideo}>
           {cameraOn ? (
-            <VideocamOutlinedIcon fontSize="medium" />
+            <VideocamOutlinedIcon fontSize="small" />
           ) : (
-            <VideocamOffOutlined fontSize="medium" />
+            <VideocamOffOutlined fontSize="small" />
           )}
-        </BootstrapIconButton>
-        <BootstrapIconButton size="medium" sx={createButtonStyle(false)}>
-          <CallEndIcon fontSize="medium" />
-        </BootstrapIconButton>
+        </IconButton>
+        <IconButton
+          sx={{
+            width: "3.5rem",
+            height: "2.5rem",
+            borderRadius: "24px",
+            backgroundColor: "#ea4335",
+            color: "white",
+            "&:hover": {
+              backgroundColor: "#ea4335",
+              boxShadow: "none",
+            },
+          }}
+        >
+          <CallEndIcon fontSize="small" />
+        </IconButton>
       </Box>
 
       <Box sx={{ display: "flex" }}>
-        <IconButton size="medium" sx={{ color: "white" }}>
+        <IconButton size="small" sx={{ color: "white" }}>
           <ChatOutlinedIcon />
         </IconButton>
       </Box>
