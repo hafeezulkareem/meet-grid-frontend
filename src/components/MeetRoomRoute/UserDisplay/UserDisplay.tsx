@@ -40,8 +40,8 @@ const UserDisplay: FC<Props> = (props) => {
         <Box sx={{ width: "100%", height: "100%", backgroundColor: "#3c4043" }}>
           <Avatar
             sx={{
-              width: "256px",
-              height: "256px",
+              width: "15rem",
+              height: "15rem",
               backgroundColor: "#02897b",
               fontSize: "5rem",
               position: "relative",
