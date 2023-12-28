@@ -16,3 +16,8 @@ export interface FooterProps {
     peerId: string | undefined;
   };
 }
+
+export interface UserContextType {
+  authenticated: boolean
+  setAuthenticated: (d: boolean) => void
+}
