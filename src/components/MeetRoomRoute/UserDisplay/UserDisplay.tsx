@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { CSSProperties, FC } from "react";
 import ReactPlayer from "react-player";
 import { Avatar, Box, Typography } from "@mui/material";
 import { MicOff } from "@mui/icons-material";
@@ -11,10 +11,11 @@ interface Props {
   playing: boolean;
   muted: boolean;
   stream: MediaStream;
+  containerStyles: CSSProperties;
 }
 
 const UserDisplay: FC<Props> = (props) => {
-  const { name, playing, muted, stream } = props;
+  const { name, playing, muted, stream, containerStyles } = props;
 
   return (
     <Box
@@ -25,6 +26,7 @@ const UserDisplay: FC<Props> = (props) => {
         border: "2px solid transparent",
         borderRadius: "8px",
         position: "relative",
+        ...containerStyles,
       }}
     >
       {playing ? (
@@ -40,8 +42,8 @@ const UserDisplay: FC<Props> = (props) => {
         <Box sx={{ width: "100%", height: "100%", backgroundColor: "#3c4043" }}>
           <Avatar
             sx={{
-              width: "15rem",
-              height: "15rem",
+              width: "10rem",
+              height: "10rem",
               backgroundColor: "#02897b",
               fontSize: "5rem",
               position: "relative",

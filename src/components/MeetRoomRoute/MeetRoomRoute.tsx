@@ -1,6 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  CSSProperties,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useParams } from "react-router-dom";
-import { Box } from "@mui/material";
+import { Avatar, Box } from "@mui/material";
 import Footer from "./Footer/Footer";
 import { Socket, io } from "socket.io-client";
 import { Peer } from "peerjs";
@@ -8,6 +15,7 @@ import { v4 as uuid } from "uuid";
 import { useMediaStream } from "../../hooks";
 import { User } from "../../types";
 import UserDisplay from "./UserDisplay/UserDisplay";
+import { CARD_MIN_HEIGHT, CARD_MIN_WIDTH } from "../../constants";
 
 const MeetRoomRoute = () => {
   const { roomId } = useParams();
@@ -23,6 +31,10 @@ const MeetRoomRoute = () => {
   const [cameraOn, setCameraOn] = useState(true);
 
   const [participants, setParticipants] = useState<Record<string, User>>({});
+  const [participantsRenderCount, setParticipantsRenderCount] =
+    useState<number>(0);
+
+  const [cardStyles, setCardStyles] = useState<CSSProperties>({});
 
   // Initializing socketJS
   useEffect(() => {
@@ -151,6 +163,75 @@ const MeetRoomRoute = () => {
     }));
   }, [peer, stream]);
 
+  const participantsCount = useMemo(
+    () => Object.keys(participants).length,
+    [participants]
+  );
+
+  const renderCount = useMemo(
+    () =>
+      participantsCount > participantsRenderCount
+        ? participantsRenderCount - 1
+        : participantsRenderCount,
+    [participantsCount, participantsRenderCount]
+  );
+
+  useLayoutEffect(() => {
+    const calculateCardDimensions = () => {
+      // Available space for rendering participants
+      const spaceWidth = window.innerWidth - 64;
+      const spaceHeight = window.innerHeight - 64 - 80;
+
+      const gutter = 16;
+
+      let width = spaceWidth;
+      let height = spaceHeight;
+
+      while (
+        participantsCount * width > spaceWidth ||
+        participantsCount * height > spaceHeight
+      ) {
+        width -= 50;
+        height -= 50;
+
+        const surrenderMinWidth = width <= CARD_MIN_WIDTH;
+        const surrenderMinHeight = height <= CARD_MIN_HEIGHT;
+
+        if (surrenderMinWidth) {
+          width = CARD_MIN_WIDTH;
+        }
+
+        if (surrenderMinHeight) {
+          height = CARD_MIN_HEIGHT;
+        }
+
+        if (surrenderMinWidth && surrenderMinHeight) break;
+      }
+
+      const participantsCanRender =
+        Math.floor((spaceWidth + gutter) / (width + gutter)) *
+        Math.floor((spaceHeight + gutter) / (height + gutter));
+
+      console.log(
+        Math.min(participantsCount, participantsCanRender),
+        width,
+        height
+      );
+      setParticipantsRenderCount(
+        Math.min(participantsCount, participantsCanRender)
+      );
+      setCardStyles({ minWidth: `${width}px`, minHeight: `${height}px` });
+    };
+
+    calculateCardDimensions();
+
+    window.addEventListener("resize", calculateCardDimensions);
+
+    return () => {
+      window.removeEventListener("resize", calculateCardDimensions);
+    };
+  }, [participantsCount]);
+
   return (
     <Box sx={{ width: "100vw", height: "100vh", backgroundColor: "#202124" }}>
       <Box
@@ -162,23 +243,55 @@ const MeetRoomRoute = () => {
           padding: "32px",
         }}
       >
-        {Object.keys(participants).map((participantId) => {
-          const participant = participants[participantId];
-          const mySelf = participant.id === peer?.id;
+        {Object.keys(participants)
+          .slice(0, renderCount)
+          .map((participantId) => {
+            const participant = participants[participantId];
+            const mySelf = participant.id === peer?.id;
 
-          const muted = mySelf ? !micOn : participant.muted;
-          const playing = mySelf ? cameraOn : participant.playing;
+            const muted = mySelf ? !micOn : participant.muted;
+            const playing = mySelf ? cameraOn : participant.playing;
 
-          return (
-            <UserDisplay
-              key={participantId}
-              name={participant.name}
-              muted={muted}
-              playing={playing}
-              stream={participant.stream}
-            />
-          );
-        })}
+            return (
+              <UserDisplay
+                key={participantId}
+                name={participant.name}
+                muted={muted}
+                playing={playing}
+                stream={participant.stream}
+                containerStyles={cardStyles}
+              />
+            );
+          })}
+
+        {participantsCount > participantsRenderCount && (
+          <Box
+            sx={{
+              flexGrow: "1",
+              overflow: "hidden",
+              border: "2px solid transparent",
+              borderRadius: "8px",
+              position: "relative",
+              backgroundColor: "#3c4043",
+              ...cardStyles,
+            }}
+          >
+            <Avatar
+              sx={{
+                width: "10rem",
+                height: "10rem",
+                backgroundColor: "transparent",
+                fontSize: "5rem",
+                position: "relative",
+                top: "50%",
+                left: "50%",
+                transform: "translateX(-50%) translateY(-50%)",
+              }}
+            >
+              +{participantsCount - participantsRenderCount - 1}
+            </Avatar>
+          </Box>
+        )}
       </Box>
       <Footer
         controls={{
