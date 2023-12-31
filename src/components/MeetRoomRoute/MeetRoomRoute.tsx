@@ -238,9 +238,9 @@ const MeetRoomRoute = () => {
         sx={{
           height: "calc(100vh - 5em)",
           display: "flex",
-          gap: "16px",
+          gap: "12px",
           flexWrap: "wrap",
-          padding: "32px",
+          padding: "16px",
         }}
       >
         {Object.keys(participants)
@@ -288,7 +288,7 @@ const MeetRoomRoute = () => {
                 transform: "translateX(-50%) translateY(-50%)",
               }}
             >
-              +{participantsCount - participantsRenderCount - 1}
+              +{participantsCount - participantsRenderCount + 1}
             </Avatar>
           </Box>
         )}
