@@ -1,14 +1,14 @@
-import { createContext, useState } from "react"
-import { UserContextType } from "../types"
+import { createContext, useState } from "react";
+import { IUserContextType } from "../types";
 
-export const UserContext=createContext<UserContextType | null>(null)
+export const UserContext = createContext<IUserContextType | null>(null);
 
-export const UserProvider=({children})=>{
-    const [authenticated,setAuthenticated]=useState(false)
+export const UserProvider = ({ children }) => {
+  const [authenticated, setAuthenticated] = useState(false);
 
-    return(
-        <UserContext.Provider value={{authenticated,setAuthenticated}}>
-            {children}
-        </UserContext.Provider>
-    )
-}
+  return (
+    <UserContext.Provider value={{ authenticated, setAuthenticated }}>
+      {children}
+    </UserContext.Provider>
+  );
+};

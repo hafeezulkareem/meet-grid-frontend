@@ -1,4 +1,4 @@
-export interface User {
+export interface IUser {
   id: string;
   name: string;
   stream: MediaStream;
@@ -6,7 +6,7 @@ export interface User {
   muted: boolean;
 }
 
-export interface FooterProps {
+export interface IFooterProps {
   controls: {
     micOn: boolean;
     setMicOn: (e: boolean) => void;
@@ -17,7 +17,17 @@ export interface FooterProps {
   };
 }
 
-export interface UserContextType {
-  authenticated: boolean
-  setAuthenticated: (d: boolean) => void
+export interface IUserContextType {
+  authenticated: boolean;
+  setAuthenticated: (d: boolean) => void;
+}
+
+export interface ITextInput {
+  value: string;
+  setValue: (d: string) => void;
+  isEmpty: boolean;
+  helperText: string;
+  name: string;
+  type: string;
+  autoFocus: boolean;
 }

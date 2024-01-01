@@ -6,7 +6,7 @@ import { Socket, io } from "socket.io-client";
 import { Peer } from "peerjs";
 import { v4 as uuid } from "uuid";
 import { useMediaStream } from "../../hooks";
-import { User } from "../../types";
+import { IUser } from "../../types";
 import UserDisplay from "./UserDisplay/UserDisplay";
 
 const MeetRoomRoute = () => {
@@ -22,7 +22,7 @@ const MeetRoomRoute = () => {
   const [micOn, setMicOn] = useState(true);
   const [cameraOn, setCameraOn] = useState(true);
 
-  const [participants, setParticipants] = useState<Record<string, User>>({});
+  const [participants, setParticipants] = useState<Record<string, IUser>>({});
 
   // Initializing socketJS
   useEffect(() => {

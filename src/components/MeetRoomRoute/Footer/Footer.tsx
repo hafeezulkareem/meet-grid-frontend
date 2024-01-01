@@ -6,7 +6,7 @@ import MicOffIcon from "@mui/icons-material/MicOff";
 import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
 import VideocamOutlinedIcon from "@mui/icons-material/VideocamOutlined";
 import CallEndIcon from "@mui/icons-material/CallEnd";
-import { FooterProps } from "../../../types";
+import { IFooterProps } from "../../../types";
 import { VideocamOffOutlined } from "@mui/icons-material";
 
 const createButtonStyle = (streaming) => ({
@@ -20,7 +20,7 @@ const createButtonStyle = (streaming) => ({
   },
 });
 
-const Footer: React.FC<FooterProps> = ({ controls }) => {
+const Footer: React.FC<IFooterProps> = ({ controls }) => {
   const { micOn, setMicOn, cameraOn, setCameraOn, socket, peerId } = controls;
   const { roomId } = useParams();
 

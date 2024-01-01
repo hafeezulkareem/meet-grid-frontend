@@ -7,9 +7,23 @@ import AuthenticationRoute from "./components/AuthenticationRoute/Authentication
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 const router = createBrowserRouter([
-  {path: "/login", Component: AuthenticationRoute},
-  { path: "/", Component: ()=><ProtectedRoute><HomeRoute/></ProtectedRoute> },
-  { path: "/:roomId", Component: ()=><ProtectedRoute><MeetRoomRoute/></ProtectedRoute> } ,
+  { path: "/login", Component: AuthenticationRoute },
+  {
+    path: "/",
+    Component: () => (
+      <ProtectedRoute>
+        <HomeRoute />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/:roomId",
+    Component: () => (
+      <ProtectedRoute>
+        <MeetRoomRoute />
+      </ProtectedRoute>
+    ),
+  },
 ]);
 
 function App() {
