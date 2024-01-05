@@ -12,39 +12,47 @@ const useUser = () => {
   const userContext = useContext(UserContext);
 
   useEffect(() => {
-    (async () => {
-      const jwtToken = Cookies.get("meet");
+    const checkAuthentication = async () => {
+      try {
+        const jwtToken = Cookies.get("meet");
 
-      if (userContext?.authenticated) {
-        setUserState((prev) => ({
-          ...prev,
-          authenticated: true,
-          loading: false,
-        }));
-      } else if (jwtToken) {
-        const response = await fetch("http://localhost:4000/api/authenticate", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `Bearer ${jwtToken}`,
-          },
-        });
+        if (userContext?.authenticated) {
+          setUserState((prev) => ({
+            ...prev,
+            authenticated: true,
+            loading: false,
+          }));
+        } else if (jwtToken) {
+          const response = await fetch(
+            "http://localhost:4000/api/authenticate",
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                authorization: `Bearer ${jwtToken}`,
+              },
+            }
+          );
 
-        if (response.ok) {
-          setUserState({ authenticated: true, loading: false, error: false });
-          userContext?.setAuthenticated(true);
+          if (response.ok) {
+            setUserState({ authenticated: true, loading: false, error: false });
+            userContext?.setAuthenticated(true);
+          } else {
+            setUserState({ authenticated: false, loading: false, error: true });
+          }
         } else {
-          setUserState({ authenticated: false, loading: false, error: true });
+          setUserState((prev) => ({
+            ...prev,
+            authenticated: false,
+            loading: false,
+          }));
         }
-      } else {
-        setUserState((prev) => ({
-          ...prev,
-          authenticated: false,
-          loading: false,
-        }));
+      } catch (err) {
+        setUserState({ authenticated: false, loading: false, error: true });
       }
-    })();
-  }, []);
+    };
+    checkAuthentication();
+  }, [userContext]);
 
   return userState;
 };
