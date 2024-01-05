@@ -7,7 +7,7 @@ import useUser from "../../hooks/useUser";
 import AppLogo from "../../common/AppLogo";
 import TextInput from "../../common/TextInput";
 
-const AuthenticationRoute = () => {
+const SigninRoute = () => {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
 
@@ -181,4 +181,4 @@ const AuthenticationRoute = () => {
   );
 };
 
-export default AuthenticationRoute;
+export default SigninRoute;

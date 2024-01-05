@@ -18,7 +18,7 @@ const Header = () => {
     if (userContext?.setAuthenticated) {
       userContext?.setAuthenticated(false);
     }
-    return navigate("/login");
+    return navigate("/signin");
   };
 
   return (

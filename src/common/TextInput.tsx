@@ -4,11 +4,12 @@ import { ITextInput } from "../types";
 const TextInput = ({
   value,
   setValue,
-  isEmpty,
+  isError,
   helperText,
   name,
   type,
   autoFocus,
+  InputProp,
 }: ITextInput) => {
   return (
     <TextField
@@ -19,9 +20,14 @@ const TextInput = ({
       value={value}
       type={type}
       onChange={(e) => setValue(e.target.value)}
-      sx={{ width: "366px", height: "54px", mt: 4 }}
-      error={isEmpty}
-      helperText={isEmpty ? helperText : ""}
+      sx={{ width: "364px", height: "52px", mt: 4 }}
+      error={isError}
+      helperText={isError ? helperText : ""}
+      InputProps={{
+        endAdornment: InputProp && (
+          <div style={{ padding: "10px" }}>@gmail.com</div>
+        ),
+      }}
     />
   );
 };
