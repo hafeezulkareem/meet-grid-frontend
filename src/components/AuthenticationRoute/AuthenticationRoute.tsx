@@ -1,4 +1,4 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
 import Cookies from "js-cookie";
@@ -28,6 +28,10 @@ const SigninRoute = () => {
     }
   });
 
+  const goToSignUp = () => {
+    navigate("/signup");
+  };
+
   const handleLogin = async () => {
     setAuthFail(false);
     setPwdEmpty(password === "");
@@ -35,7 +39,7 @@ const SigninRoute = () => {
 
     if (password !== "" && userName !== "") {
       const userPayload = {
-        userName: userName,
+        userName: `${userName}@gmail.com`,
         password: password,
       };
 
@@ -112,20 +116,20 @@ const SigninRoute = () => {
             <TextInput
               value={userName}
               setValue={setUserName}
-              isEmpty={userNameEmpty}
+              isError={userNameEmpty}
               helperText={"User name can't be empty"}
               name={"Username"}
               type={"text"}
-              autoFocus={true}
+              autoFocus
+              addGmailDomain
             />
             <TextInput
               value={password}
               setValue={setPassword}
-              isEmpty={pwdEmpty}
+              isError={pwdEmpty}
               helperText={"Password can't be empty"}
               name={"Password"}
               type={"password"}
-              autoFocus={false}
             />
             <Typography
               sx={{
@@ -164,6 +168,7 @@ const SigninRoute = () => {
               sx={{ color: "#1A73e8" }}
               variant="text"
               size="small"
+              onClick={goToSignUp}
             >
               <Typography
                 sx={{ fontSize: 14, fontWeight: 500, textTransform: "none" }}

@@ -1,5 +1,15 @@
 import { TextField } from "@mui/material";
-import { ITextInput } from "../types";
+
+interface Props {
+  value: string;
+  setValue: (d: string) => void;
+  isError: boolean;
+  helperText: string;
+  name: string;
+  type: string;
+  autoFocus?: boolean;
+  addGmailDomain?: boolean;
+}
 
 const TextInput = ({
   value,
@@ -8,9 +18,9 @@ const TextInput = ({
   helperText,
   name,
   type,
-  autoFocus,
-  InputProp,
-}: ITextInput) => {
+  autoFocus = false,
+  addGmailDomain,
+}: Props) => {
   return (
     <TextField
       required
@@ -24,7 +34,7 @@ const TextInput = ({
       error={isError}
       helperText={isError ? helperText : ""}
       InputProps={{
-        endAdornment: InputProp && (
+        endAdornment: addGmailDomain && (
           <div style={{ padding: "10px" }}>@gmail.com</div>
         ),
       }}

@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import AppLogo from "../../common/AppLogo";
 import TextInput from "../../common/TextInput";
-import { hash } from "bcryptjs";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -29,16 +28,12 @@ const SignUp = () => {
     setPasswordEmpty(password === "");
     setEmailEmpty(email === "");
 
-    if (password !== confirmPassword) {
-      setMatching(false);
-    }
+    const isMatching = password === confirmPassword;
+    setMatching(isMatching);
 
     if (!validateEmail()) return;
 
-    const userPayload = {
-      email: email,
-      password: hash(password, 10),
-    };
+    const userPayload = { email: `${email}@gmail.com`, password };
 
     const response = await fetch("http://localhost:4000/api/signUp", {
       method: "POST",
@@ -103,7 +98,7 @@ const SignUp = () => {
               name={"Create a Gmail address"}
               type={"text"}
               autoFocus={true}
-              InputProp={true}
+              addGmailDomain
             />
             <TextInput
               value={password}

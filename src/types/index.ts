@@ -21,14 +21,3 @@ export interface IUserContextType {
   authenticated: boolean;
   setAuthenticated: (d: boolean) => void;
 }
-
-export interface ITextInput {
-  value: string;
-  setValue: (d: string) => void;
-  isError: boolean;
-  helperText: string;
-  name: string;
-  type: string;
-  autoFocus: boolean;
-  InputProp?: boolean;
-}
