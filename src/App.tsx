@@ -3,11 +3,13 @@ import { Box } from "@mui/material";
 
 import HomeRoute from "./components/HomeRoute/HomeRoute";
 import MeetRoomRoute from "./components/MeetRoomRoute/MeetRoomRoute";
-import AuthenticationRoute from "./components/AuthenticationRoute/AuthenticationRoute";
+import SigninRoute from "./components/AuthenticationRoute/AuthenticationRoute";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import SignUp from "./components/AuthenticationRoute/SignUp";
 
 const router = createBrowserRouter([
-  { path: "/login", Component: AuthenticationRoute },
+  { path: "/signin", Component: SigninRoute },
+  { path: "/signup", Component: SignUp },
   {
     path: "/",
     Component: () => (
