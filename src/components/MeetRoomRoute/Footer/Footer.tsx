@@ -21,20 +21,10 @@ const createButtonStyle = (streaming) => ({
 });
 
 const Footer: React.FC<IFooterProps> = ({ controls }) => {
-  const { micOn, setMicOn, cameraOn, setCameraOn, socket, peerId } = controls;
+  const { muted, toggleAudio, playing, toggleVideo } = controls;
   const { roomId } = useParams();
 
   const nowTime = dayjs(new Date()).format("hh:mm A");
-
-  const handleAudio = () => {
-    socket.emit("userAudioStatus", { peerId, muted: micOn });
-    setMicOn(!micOn);
-  };
-
-  const handleVideo = () => {
-    socket.emit("userVideoStatus", { peerId, playing: !cameraOn });
-    setCameraOn(!cameraOn);
-  };
 
   return (
     <Box
@@ -54,15 +44,15 @@ const Footer: React.FC<IFooterProps> = ({ controls }) => {
       </Box>
 
       <Box sx={{ display: "flex", gap: "12px" }}>
-        <IconButton sx={createButtonStyle(micOn)} onClick={handleAudio}>
-          {micOn ? (
-            <MicIcon fontSize="small" />
-          ) : (
+        <IconButton sx={createButtonStyle(!muted)} onClick={toggleAudio}>
+          {muted ? (
             <MicOffIcon fontSize="small" />
+          ) : (
+            <MicIcon fontSize="small" />
           )}
         </IconButton>
-        <IconButton sx={createButtonStyle(cameraOn)} onClick={handleVideo}>
-          {cameraOn ? (
+        <IconButton sx={createButtonStyle(playing)} onClick={toggleVideo}>
+          {playing ? (
             <VideocamOutlinedIcon fontSize="small" />
           ) : (
             <VideocamOffOutlined fontSize="small" />

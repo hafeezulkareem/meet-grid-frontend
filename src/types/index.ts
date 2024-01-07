@@ -8,12 +8,10 @@ export interface IUser {
 
 export interface IFooterProps {
   controls: {
-    micOn: boolean;
-    setMicOn: (e: boolean) => void;
-    cameraOn: boolean;
-    setCameraOn: (e: boolean) => void;
-    socket: any;
-    peerId: string | undefined;
+    muted: boolean;
+    toggleAudio: () => void;
+    playing: boolean;
+    toggleVideo: () => void;
   };
 }
 

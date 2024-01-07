@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Box } from "@mui/material";
 import Footer from "./Footer/Footer";
@@ -19,8 +19,8 @@ export const MeetRoomRoute = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [peer, setPeer] = useState<Peer | null>(null);
 
-  const [micOn, setMicOn] = useState(true);
-  const [cameraOn, setCameraOn] = useState(true);
+  const [muted, setMuted] = useState<boolean>(false);
+  const [playing, setPlaying] = useState<boolean>(true);
 
   const [participants, setParticipants] = useState<Record<string, IUser>>({});
 
@@ -52,16 +52,20 @@ export const MeetRoomRoute = () => {
     setPeer(peer);
 
     peer.on("open", (peerId: string) => {
-      socket.emit("addPeer", { roomId, peerId });
+      socket.emit("addPeer", { roomId, peerId, participants });
     });
-  }, [roomId, socket]);
+  }, [participants, roomId, socket]);
+
+  console.log("Participants", participants);
 
   // Calling new participant
   useEffect(() => {
     if (!socket || !peer || !stream) return;
 
     socket.on("peerAdded", (peerId: string) => {
-      const call = peer.call(peerId, stream);
+      const call = peer.call(peerId, stream, {
+        metadata: { olderPeerDetails: participants[peer.id] },
+      });
 
       call.on("stream", (stream) => {
         setParticipants((prev) => ({
@@ -76,25 +80,25 @@ export const MeetRoomRoute = () => {
         }));
       });
     });
-  }, [peer, socket, stream]);
+  }, [participants, peer, socket, stream]);
 
   // Picking up the call
   useEffect(() => {
     if (!peer || !stream) return;
 
     peer.on("call", (call) => {
-      const { peer: calledId } = call;
+      const {
+        peer: calledId,
+        metadata: { olderPeerDetails = {} },
+      } = call;
       call.answer(stream as MediaStream);
 
       call.on("stream", (stream) => {
         setParticipants((prev) => ({
           ...prev,
           [calledId]: {
-            id: calledId,
-            name: "Hafeez",
+            ...olderPeerDetails,
             stream,
-            playing: true,
-            muted: false,
           },
         }));
       });
@@ -111,21 +115,13 @@ export const MeetRoomRoute = () => {
 
     socket.on("userAudioStatus", (data) => {
       if (participants[data.peerId]) {
-        setParticipants((prev) => {
-          const updatedParticipants = { ...prev };
-          updatedParticipants[data.peerId].muted = data.muted;
-          return updatedParticipants;
-        });
+        updateMutedStatus(data.peerId, data.muted);
       }
     });
 
     socket.on("userVideoStatus", (data) => {
       if (participants[data.peerId]) {
-        setParticipants((prev) => {
-          const updatedParticipants = { ...prev };
-          updatedParticipants[data.peerId].playing = data.playing;
-          return updatedParticipants;
-        });
+        updatePlayingStatus(data.peerId, data.playing);
       }
     });
 
@@ -153,6 +149,40 @@ export const MeetRoomRoute = () => {
     }));
   }, [peer, stream]);
 
+  const updateMutedStatus = (peerId: string, muted: boolean) => {
+    setParticipants((prev) => {
+      const updatedParticipants = { ...prev };
+      updatedParticipants[peerId].muted = muted;
+      return updatedParticipants;
+    });
+  };
+
+  const updatePlayingStatus = (peerId: string, playing: boolean) => {
+    setParticipants((prev) => {
+      const updatedParticipants = { ...prev };
+      updatedParticipants[peerId].playing = playing;
+      return updatedParticipants;
+    });
+  };
+
+  const toggleAudio = () => {
+    const peerId = peer?.id as string;
+    const updatedMuted = !muted;
+
+    socket?.emit("userAudioStatus", { peerId, muted: updatedMuted });
+    setMuted(updatedMuted);
+    updateMutedStatus(peerId, updatedMuted);
+  };
+
+  const toggleVideo = () => {
+    const peerId = peer?.id as string;
+    const updatedPlaying = !playing;
+
+    socket?.emit("userVideoStatus", { peerId, playing: updatedPlaying });
+    setPlaying(updatedPlaying);
+    updatePlayingStatus(peerId, updatedPlaying);
+  };
+
   return (
     <Box sx={{ width: "100vw", height: "100vh", backgroundColor: "#202124" }}>
       <Box
@@ -168,15 +198,15 @@ export const MeetRoomRoute = () => {
           const participant = participants[participantId];
           const mySelf = participant.id === peer?.id;
 
-          const muted = mySelf ? !micOn : participant.muted;
-          const playing = mySelf ? cameraOn : participant.playing;
+          const isMuted = mySelf ? muted : participant.muted;
+          const isPlaying = mySelf ? playing : participant.playing;
 
           return (
             <UserDisplay
               key={participantId}
               name={participant.name}
-              muted={muted}
-              playing={playing}
+              muted={isMuted}
+              playing={isPlaying}
               stream={participant.stream}
             />
           );
@@ -184,12 +214,10 @@ export const MeetRoomRoute = () => {
       </Box>
       <Footer
         controls={{
-          micOn,
-          setMicOn,
-          cameraOn,
-          setCameraOn,
-          socket,
-          peerId: peer?.id,
+          muted,
+          toggleAudio,
+          playing,
+          toggleVideo,
         }}
       />
     </Box>
