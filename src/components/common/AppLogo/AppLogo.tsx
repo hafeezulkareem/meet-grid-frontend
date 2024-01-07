@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 
-const AppLogo = () => {
+export const AppLogo = () => {
   return (
     <Box sx={{ height: 20 }}>
       <svg
@@ -48,5 +48,3 @@ const AppLogo = () => {
     </Box>
   );
 };
-
-export default AppLogo;

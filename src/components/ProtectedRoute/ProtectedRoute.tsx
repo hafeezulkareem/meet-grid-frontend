@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import useUser from "../../hooks/useUser";
 import { Navigate, useLocation } from "react-router-dom";
 
-const ProtectedRoute = ({ children }) => {
+export const ProtectedRoute = ({ children }) => {
   const { authenticated, loading, error } = useUser();
   const location = useLocation();
 
@@ -44,5 +44,3 @@ const ProtectedRoute = ({ children }) => {
     <Navigate to="/signin" state={{ from: location }} replace />
   );
 };
-
-export default ProtectedRoute;

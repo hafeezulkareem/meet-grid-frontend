@@ -4,10 +4,9 @@ import { useState, useContext, useEffect } from "react";
 import Cookies from "js-cookie";
 import { UserContext } from "../../context/UserContext";
 import useUser from "../../hooks/useUser";
-import AppLogo from "../../common/AppLogo";
-import TextInput from "../../common/TextInput";
+import { AppLogo, TextInput } from "../common";
 
-const SigninRoute = () => {
+export const SignInRoute = () => {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
 
@@ -185,5 +184,3 @@ const SigninRoute = () => {
     </Box>
   );
 };
-
-export default SigninRoute;

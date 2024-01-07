@@ -1,10 +1,9 @@
 import { Box, Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import AppLogo from "../../common/AppLogo";
-import TextInput from "../../common/TextInput";
+import { AppLogo, TextInput } from "../common";
 
-const SignUp = () => {
+export const SignUpRoute = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -140,5 +139,3 @@ const SignUp = () => {
     </Box>
   );
 };
-
-export default SignUp;

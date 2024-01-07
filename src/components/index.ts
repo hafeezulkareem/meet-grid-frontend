@@ -1,4 +1,5 @@
 export * from "./HomeRoute/HomeRoute";
 export * from "./MeetRoomRoute/MeetRoomRoute";
-export * from "./AuthenticationRoute/AuthenticationRoute";
+export * from "./SignInRoute/SignInRoute";
 export * from "./ProtectedRoute/ProtectedRoute";
+export * from "./SignUpRoute/SignUpRoute";

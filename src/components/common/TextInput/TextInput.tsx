@@ -11,7 +11,7 @@ interface Props {
   addGmailDomain?: boolean;
 }
 
-const TextInput = ({
+export const TextInput = ({
   value,
   setValue,
   isError,
@@ -41,5 +41,3 @@ const TextInput = ({
     />
   );
 };
-
-export default TextInput;

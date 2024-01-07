@@ -9,7 +9,7 @@ import { useMediaStream } from "../../hooks";
 import { IUser } from "../../types";
 import UserDisplay from "./UserDisplay/UserDisplay";
 
-const MeetRoomRoute = () => {
+export const MeetRoomRoute = () => {
   const { roomId } = useParams();
   const stream = useMediaStream();
 
@@ -193,5 +193,3 @@ const MeetRoomRoute = () => {
     </Box>
   );
 };
-
-export default MeetRoomRoute;
