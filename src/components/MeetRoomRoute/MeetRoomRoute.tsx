@@ -101,6 +101,7 @@ export const MeetRoomRoute = () => {
     });
   }, [peer, stream]);
 
+  // User state update
   useEffect(() => {
     if (!socket || !peer) return;
 
@@ -135,6 +136,7 @@ export const MeetRoomRoute = () => {
     };
   }, [socket, peer, roomId, participants]);
 
+  // Adding self data
   useEffect(() => {
     if (!stream || !peer) return;
 
