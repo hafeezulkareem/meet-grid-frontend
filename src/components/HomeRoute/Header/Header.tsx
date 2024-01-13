@@ -21,24 +21,27 @@ const Header = () => {
     return navigate("/signin");
   };
 
+  const goToCalendar = () => {
+    navigate("/calendar");
+  };
+
   return (
     <Box
       sx={{
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        padding: "12px 32px",
+        padding: "24px 32px",
       }}
     >
       <Typography variant="h6" sx={{ color: "#5f6367" }}>
         Meet Grid
       </Typography>
-      <Box
-        sx={{
-          display: "flex",
-        }}
-      >
-        <Box sx={{ color: "#5f6367" }}>
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Button type="button" variant="contained" onClick={goToCalendar}>
+          Calendar
+        </Button>
+        <Box sx={{ color: "#5f6367", marginLeft: "16px" }}>
           <Typography component="span">{nowTime}</Typography>
           <Typography component="span"> • </Typography>
           <Typography component="span">{nowDate}</Typography>
@@ -47,7 +50,7 @@ const Header = () => {
           type="button"
           variant="contained"
           onClick={handleLogout}
-          sx={{ ml: 5, height: "30px" }}
+          sx={{ ml: 4 }}
         >
           Logout
         </Button>

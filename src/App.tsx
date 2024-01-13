@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Box } from "@mui/material";
 import {
+  CalendarRoute,
   HomeRoute,
   MeetRoomRoute,
   ProtectedRoute,
@@ -24,6 +25,14 @@ const router = createBrowserRouter([
     Component: () => (
       <ProtectedRoute>
         <MeetRoomRoute />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/calendar",
+    Component: () => (
+      <ProtectedRoute>
+        <CalendarRoute />
       </ProtectedRoute>
     ),
   },
