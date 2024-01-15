@@ -1,5 +1,12 @@
-import { Box, Button, svgIconClasses } from "@mui/material";
-import React, { FC } from "react";
+import {
+  Box,
+  Button,
+  Input,
+  Typography,
+  inputClasses,
+  svgIconClasses,
+} from "@mui/material";
+import React, { ChangeEvent, FC, useState } from "react";
 import {
   DateCalendar,
   LocalizationProvider,
@@ -11,6 +18,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Dayjs } from "dayjs";
 import AddIcon from "./AddIcon/AddIcon";
 import { pickersArrowSwitcherClasses } from "@mui/x-date-pickers/internals";
+import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 
 interface Props {
   showSidebar: boolean;
@@ -20,6 +28,12 @@ interface Props {
 
 const Sidebar: FC<Props> = (props) => {
   const { showSidebar, selectedDate, setSelectedDate } = props;
+
+  const [searchText, setSearchText] = useState<string>("");
+
+  const handleSearchTextChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchText(event.target.value);
+  };
 
   return (
     <Box
@@ -129,6 +143,62 @@ const Sidebar: FC<Props> = (props) => {
           }}
         />
       </LocalizationProvider>
+      <Box
+        sx={{
+          width: "auto",
+          height: "40px",
+          position: "relative",
+          backgroundColor: "rgb(241,243,244)",
+          margin: "0px 20px 8px 20px",
+          borderRadius: "4px 4px 0px 0px",
+          padding: "0px 12px",
+        }}
+      >
+        {searchText.length === 0 && (
+          <Box
+            sx={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              position: "absolute",
+              top: "0px",
+              left: "0px",
+              color: "#80868a",
+              padding: "inherit",
+            }}
+          >
+            <PeopleAltOutlinedIcon fontSize="medium" />
+            <Typography sx={{ marginLeft: "12px", fontSize: "14px" }}>
+              Search for people
+            </Typography>
+          </Box>
+        )}
+        <Input
+          onChange={handleSearchTextChange}
+          sx={{
+            width: "100%",
+            height: "100%",
+            position: "absolute",
+            top: "0px",
+            left: "0px",
+            backgroundColor: "transparent",
+            fontSize: "14px",
+            padding: "inherit",
+            color: "#80868a",
+            [`:hover:not(.${inputClasses.disabled} .${inputClasses.error})::before`]:
+              {
+                borderBottom: "transparent",
+              },
+            "::before": {
+              borderBottomColor: "transparent",
+            },
+          }}
+          slotProps={{
+            input: { sx: { padding: "0px", caretColor: "#1976d2" } },
+          }}
+        />
+      </Box>
     </Box>
   );
 };
